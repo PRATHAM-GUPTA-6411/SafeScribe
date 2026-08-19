@@ -1,5 +1,5 @@
 /**
- * firebase.js — Firebase Auth + Firestore helpers
+ * firebase.js — SafeScribe Firebase Auth + Firestore helpers
  *
  * ============================================================================
  * PRIVACY / ZERO-KNOWLEDGE (read this if you host or maintain this app)
@@ -27,12 +27,13 @@
 //    Project settings → Your apps → SDK setup and configuration
 // ---------------------------------------------------------------------------
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAxLl-z0vSSdHF4PL4KLIudd5Q46iynItM",
+  authDomain: "safescribe-274bb.firebaseapp.com",
+  projectId: "safescribe-274bb",
+  storageBucket: "safescribe-274bb.firebasestorage.app",
+  messagingSenderId: "362632932145",
+  appId: "1:362632932145:web:1e81aadfa995cfdf109e10",
+  measurementId: "G-9YT8Z103LE"
 };
 
 let auth = null;

@@ -1,6 +1,6 @@
 {
-  "name": "Locked Notes",
-  "short_name": "Locked Notes",
+  "name": "SafeScribe",
+  "short_name": "SafeScribe",
   "description": "Client-side encrypted notes synced with your Google account. The host cannot read your notes.",
   "start_url": "./",
   "scope": "./",

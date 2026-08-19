@@ -1,5 +1,5 @@
 /**
- * app.js — UI, vault password, CryptoJS AES, and note CRUD orchestration
+ * app.js — SafeScribe UI, vault password, CryptoJS AES, and note CRUD orchestration
  *
  * ============================================================================
  * THE APP CREATOR CANNOT READ YOUR NOTES

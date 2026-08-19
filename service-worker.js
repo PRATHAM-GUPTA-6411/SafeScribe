@@ -1,14 +1,14 @@
 /**
- * Service worker — caches the app shell so Locked Notes can be installed as a PWA.
+ * Service worker — caches the app shell so SafeScribe can be installed as a PWA.
  *
  * Privacy: this cache only stores static files (HTML/CSS/JS/icons).
  * Encrypted notes live in Firestore and in memory after unlock.
  * The vault password is never written to Cache Storage.
  */
 
-const CACHE_NAME = "locked-notes-v1";
+const CACHE_NAME = "safescribe-v2";
 
-// Relative paths so GitHub Pages works at /locked-notes-app/
+// Relative paths so GitHub Pages works at /SafeScribe/
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -44,17 +44,18 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Always fetch JS from the network so firebase.js config updates are not stuck.
+  const isAppScript = url.pathname.endsWith(".js");
+
   event.respondWith(
-    caches.match(request).then((cached) => {
-      if (cached) return cached;
-      return fetch(request).then((response) => {
-        if (!response || response.status !== 200 || response.type === "opaque") {
-          return response;
+    fetch(request)
+      .then((response) => {
+        if (response && response.status === 200 && response.type !== "opaque" && !isAppScript) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
         }
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
         return response;
-      }).catch(() => caches.match("./index.html"));
-    })
+      })
+      .catch(() => caches.match(request).then((cached) => cached || caches.match("./index.html")))
   );
 });

@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#0f1419" />
     <meta name="description" content="Private notes encrypted on your device. The app host cannot read them." />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>Locked Notes</title>
+    <title>SafeScribe</title>
     <link rel="manifest" href="manifest.json" />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="icon.svg" />
@@ -22,7 +22,7 @@
       <div class="card auth-card">
         <div class="brand">
           <img src="icon.svg" alt="" width="64" height="64" />
-          <h1>Locked Notes</h1>
+          <h1>SafeScribe</h1>
           <p class="lede">Notes are encrypted on your device before they are saved. The people who built or host this app cannot read them.</p>
         </div>
         <div id="config-warning" class="banner warning" hidden>
@@ -53,14 +53,25 @@
             <span id="unlock-email"></span>
           </div>
         </div>
-        <h2>Unlock your vault</h2>
-        <p class="lede">This password encrypts and decrypts notes on this device. It is never sent to Firebase. If you forget it, existing notes cannot be recovered.</p>
+        <h2 id="unlock-heading">Unlock your vault</h2>
+        <p id="unlock-lede" class="lede">This is not your Google password. It encrypts notes on this device and is never sent to Firebase.</p>
         <form id="form-unlock">
           <label for="vault-password">Vault password</label>
-          <input id="vault-password" name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="At least 8 characters" />
-          <button type="submit" class="btn primary">Unlock notes</button>
+          <div class="password-field">
+            <input id="vault-password" name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="At least 8 characters" />
+            <button type="button" class="btn-eye" data-toggle-password="vault-password" aria-pressed="false">Show</button>
+          </div>
+          <div id="confirm-wrap" hidden>
+            <label for="vault-confirm">Confirm password</label>
+            <div class="password-field">
+              <input id="vault-confirm" name="confirm" type="password" autocomplete="new-password" minlength="8" placeholder="Type it again" />
+              <button type="button" class="btn-eye" data-toggle-password="vault-confirm" aria-pressed="false">Show</button>
+            </div>
+          </div>
+          <button type="submit" id="btn-unlock-submit" class="btn primary">Unlock notes</button>
         </form>
         <p id="unlock-error" class="error" role="alert" hidden></p>
+        <button type="button" id="btn-forgot" class="btn-link">Forgot vault password?</button>
         <button type="button" id="btn-signout-unlock" class="btn ghost">Sign out</button>
       </div>
     </section>
@@ -72,7 +83,7 @@
       <header class="app-header">
         <div class="header-brand">
           <img src="icon.svg" alt="" width="32" height="32" />
-          <span>Locked Notes</span>
+          <span>SafeScribe</span>
         </div>
         <div class="header-actions">
           <button type="button" id="btn-new-note" class="btn primary small">New note</button>

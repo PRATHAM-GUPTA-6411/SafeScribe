@@ -1,12 +1,12 @@
-# Locked Notes App
+# SafeScribe
 
-Private notes encrypted **in your browser** with CryptoJS AES, then synced to Firebase Firestore. Google Sign-In identifies *which encrypted blobs are yours*. The vault password never leaves the device.
+SafeScribe keeps notes encrypted **in your browser** with CryptoJS AES, then synced to Firebase Firestore. Google Sign-In identifies *which encrypted blobs are yours*. The vault password never leaves the device.
 
 **The app creator / host / Firebase admin cannot read user notes.** Firestore and GitHub Pages only ever see ciphertext.
 
 Live URL shape after GitHub Pages deploy:
 
-`https://<username>.github.io/locked-notes-app/`
+`https://<username>.github.io/SafeScribe/`
 
 ---
 
@@ -92,13 +92,13 @@ This repo is already a git repository. From the project folder:
 
 ```bash
 git add .
-git commit -m "Add Locked Notes App"
+git commit -m "Add SafeScribe"
 git branch -M main
-git remote add origin https://github.com/<username>/locked-notes-app.git
+git remote add origin https://github.com/<username>/SafeScribe.git
 git push -u origin main
 ```
 
-Create the empty GitHub repo `locked-notes-app` first (no README, so you do not get a merge conflict).
+Create the empty GitHub repo `SafeScribe` first (no README, so you do not get a merge conflict).
 
 ### GitHub Pages
 
@@ -107,7 +107,7 @@ Create the empty GitHub repo `locked-notes-app` first (no README, so you do not 
 3. Branch: `main` / folder: `/ (root)` → Save
 4. After a minute, open:
 
-`https://<username>.github.io/locked-notes-app/`
+`https://<username>.github.io/SafeScribe/`
 
 Paths in `manifest.json` and the service worker are **relative** (`./`), so the app works under that subpath.
 
@@ -119,7 +119,7 @@ If Google sign-in fails on the live site, you forgot to add `<username>.github.i
 
 On HTTPS (GitHub Pages) or localhost:
 
-- Chrome / Edge: install icon in the address bar, or menu → **Install Locked Notes**
+- Chrome / Edge: install icon in the address bar, or menu → **Install SafeScribe**
 - Android Chrome: **Add to Home screen**
 - iPhone Safari: Share → **Add to Home Screen**
 
