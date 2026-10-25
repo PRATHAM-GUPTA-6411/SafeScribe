@@ -4,3 +4,21 @@ Thumbs.db
 .firebase/
 .idea/
 .vscode/
+
+# --- SafeScribe-DevOps additions: never commit secrets or build output ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+.aws/
+credentials
+node_modules/
+dist/
+build/
+coverage/
+*.zip
+# generated at deploy time, contains environment-specific values
+frontend/config.js
