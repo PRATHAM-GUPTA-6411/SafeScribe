@@ -83,6 +83,39 @@ async function openApp({ accessToken = "asha-token", claims = { sub: "asha", nam
 
 const serverNotes = async (token = "asha-token") => (await (await t.call("GET", "/api/notes", { token })).json()).notes;
 
+test("password visibility and forgotten-password reset controls work", async () => {
+  const app = await openApp({
+    accessToken: "passwordcontrols-token",
+    claims: { sub: "password-controls", name: "Password Controls", email: "password@example.com" },
+  });
+  await waitFor(() => app.visible("screen-unlock"), "unlock screen");
+
+  const password = app.$("vault-password");
+  const toggle = app.doc.querySelector('[data-toggle-password="vault-password"]');
+  toggle.click();
+  assert.equal(password.type, "text");
+  assert.equal(toggle.textContent, "Hide");
+  toggle.click();
+  assert.equal(password.type, "password");
+  assert.equal(toggle.textContent, "Show");
+
+  app.$("btn-forgot").click();
+  assert.equal(app.$("confirm-wrap").hidden, false);
+  assert.equal(app.$("reset-copy").hidden, false);
+  assert.equal(app.$("btn-unlock-submit").textContent, "Reset vault");
+
+  password.value = "new-password";
+  app.$("vault-confirm").value = "different-password";
+  app.submit("form-unlock");
+  assert.match(app.$("unlock-error").textContent, /do not match/);
+
+  app.$("vault-confirm").value = "new-password";
+  app.submit("form-unlock");
+  await waitFor(() => app.visible("screen-app"), "empty reset vault");
+  assert.equal((await serverNotes("passwordcontrols-token")).length, 0);
+  app.close();
+});
+
 test("sign-in callback, unlock, create, autosave, reload, wrong password, delete: full journey", async () => {
   // 1. Return from Cognito: code exchanged, user recognised, unlock screen shown.
   let app = await openApp();

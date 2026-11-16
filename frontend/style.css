@@ -157,6 +157,67 @@ textarea {
   font: inherit;
 }
 
+.password-field {
+  position: relative;
+}
+
+.password-field input {
+  padding-right: 76px;
+}
+
+.btn-eye {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 8px;
+  padding: 6px 8px;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-eye:hover,
+.btn-eye:focus-visible {
+  background: var(--accent-dim);
+}
+
+.btn-link {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-link:hover,
+.btn-link:focus-visible {
+  text-decoration: underline;
+}
+
+.reset-copy {
+  margin: 14px 0 0;
+  padding: 12px;
+  border: 1px solid rgba(240, 113, 120, 0.35);
+  border-radius: 12px;
+  background: rgba(240, 113, 120, 0.08);
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.reset-copy strong {
+  color: var(--danger);
+}
+
 input:focus,
 textarea:focus {
   outline: 2px solid var(--accent);
@@ -211,6 +272,17 @@ textarea {
 .btn:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+.btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.btn:focus-visible,
+.btn-link:focus-visible,
+.btn-eye:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 .google-g {
