@@ -38,7 +38,15 @@
     loginError: document.getElementById("login-error"),
     formUnlock: document.getElementById("form-unlock"),
     vaultPassword: document.getElementById("vault-password"),
+    vaultConfirm: document.getElementById("vault-confirm"),
+    confirmWrap: document.getElementById("confirm-wrap"),
+    unlockHeading: document.getElementById("unlock-heading"),
+    unlockLede: document.getElementById("unlock-lede"),
+    unlockSubmit: document.getElementById("btn-unlock-submit"),
     unlockError: document.getElementById("unlock-error"),
+    resetCopy: document.getElementById("reset-copy"),
+    btnForgot: document.getElementById("btn-forgot"),
+    btnCancelReset: document.getElementById("btn-cancel-reset"),
     unlockAvatar: document.getElementById("unlock-avatar"),
     unlockName: document.getElementById("unlock-name"),
     unlockEmail: document.getElementById("unlock-email"),
@@ -118,6 +126,29 @@
     els.body.value = "";
     if (currentUser) showScreen("unlock");
     else showScreen("login");
+  }
+
+  function setResetMode(enabled) {
+    els.confirmWrap.hidden = !enabled;
+    els.vaultConfirm.required = enabled;
+    els.resetCopy.hidden = !enabled;
+    els.btnForgot.hidden = enabled;
+    els.btnCancelReset.hidden = !enabled;
+    els.unlockHeading.textContent = enabled ? "Reset your vault" : "Unlock your vault";
+    els.unlockLede.textContent = enabled
+      ? "Create a new password for an empty vault. Your old encrypted notes cannot be recovered."
+      : "This is not your Google password. It encrypts notes on this device and is never sent to Firebase.";
+    els.unlockSubmit.textContent = enabled ? "Reset vault" : "Unlock notes";
+    showError(els.unlockError, "");
+    if (enabled) els.vaultConfirm.focus();
+  }
+
+  async function resetVault() {
+    const snapshot = await listEncryptedNotes(currentUser.uid);
+    await Promise.all(snapshot.docs.map((doc) => deleteEncryptedNote(currentUser.uid, doc.id)));
+    vaultPassword = els.vaultPassword.value;
+    notesCache = [];
+    selectedId = null;
   }
 
   // ----- Notes UI ---------------------------------------------------------
@@ -311,6 +342,24 @@
       showError(els.unlockError, "Use at least 8 characters.");
       return;
     }
+    if (!els.confirmWrap.hidden) {
+      if (password !== els.vaultConfirm.value) {
+        showError(els.unlockError, "Passwords do not match.");
+        return;
+      }
+      if (!window.confirm("Reset your vault and permanently delete all encrypted notes?")) return;
+      try {
+        await resetVault();
+        setResetMode(false);
+        els.vaultConfirm.value = "";
+        showScreen("app");
+        renderList();
+        els.listStatus.textContent = "Your new vault is empty. Create a note to get started.";
+      } catch (err) {
+        showError(els.unlockError, err.message || "Could not reset the vault.");
+      }
+      return;
+    }
     vaultPassword = password;
     showScreen("app");
     try {
@@ -320,6 +369,23 @@
       showScreen("unlock");
       showError(els.unlockError, err.message);
     }
+  });
+
+  document.querySelectorAll("[data-toggle-password]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const input = document.getElementById(button.dataset.togglePassword);
+      const visible = input.type === "text";
+      input.type = visible ? "password" : "text";
+      button.textContent = visible ? "Show" : "Hide";
+      button.setAttribute("aria-pressed", String(!visible));
+      button.setAttribute("aria-label", `${visible ? "Show" : "Hide"} password`);
+    });
+  });
+  els.btnForgot.addEventListener("click", () => setResetMode(true));
+  els.btnCancelReset.addEventListener("click", () => {
+    setResetMode(false);
+    els.vaultPassword.value = "";
+    els.vaultConfirm.value = "";
   });
 
   els.btnSignoutUnlock.addEventListener("click", () => signOutUser());
